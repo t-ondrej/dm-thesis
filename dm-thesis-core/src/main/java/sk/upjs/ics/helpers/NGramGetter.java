@@ -1,4 +1,4 @@
-package sk.upjs.ics.tokenizers;
+package sk.upjs.ics.helpers;
 
 import java.util.Collection;
 

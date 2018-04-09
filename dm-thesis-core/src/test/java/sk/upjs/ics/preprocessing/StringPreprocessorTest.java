@@ -1,22 +1,13 @@
 package sk.upjs.ics.preprocessing;
 
 import org.junit.Test;
-import sk.upjs.ics.preprocessing.stringpreprocessing.preprocessingunits.DelimitedNumbersGetter;
-import sk.upjs.ics.preprocessing.stringpreprocessing.preprocessingunits.NumberCountGetter;
-import sk.upjs.ics.preprocessing.stringpreprocessing.preprocessingunits.PunctuationCountGetter;
-import sk.upjs.ics.preprocessing.stringpreprocessing.StringPreprocessingUnit;
-import sk.upjs.ics.preprocessing.stringpreprocessing.StringPreprocessor;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class StringPreprocessorTest {
 
 
     @Test
     public void test() {
-        List<StringPreprocessingUnit> preprocessingUnits = new ArrayList<>();
+       /* List<StringPreprocessingUnit> preprocessingUnits = new ArrayList<>();
         preprocessingUnits.add(new DelimitedNumbersGetter());
         preprocessingUnits.add(new NumberCountGetter());
         preprocessingUnits.add(new PunctuationCountGetter());
@@ -30,10 +21,10 @@ public class StringPreprocessorTest {
 
         List<Map<String, Integer>> results = new ArrayList<>();
         StringPreprocessor preprocessor = new StringPreprocessor(preprocessingUnits);
-        strings.forEach(preprocessor::preprocess);
+        strings.forEach(preprocessor::process);
 
         results.add(preprocessor.getResult());
 
-        results.forEach(System.out::println);
+        results.forEach(System.out::println);*/
     }
 }

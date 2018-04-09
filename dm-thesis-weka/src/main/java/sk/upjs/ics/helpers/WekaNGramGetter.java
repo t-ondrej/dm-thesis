@@ -1,10 +1,8 @@
-package sk.upjs.ics.tokenizers;
+package sk.upjs.ics.helpers;
 
 import weka.core.tokenizers.NGramTokenizer;
-import weka.core.tokenizers.Tokenizer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 /**

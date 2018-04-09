@@ -1,31 +1,21 @@
-package sk.upjs.ics;
+package sk.upjs.ics.helpers;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public final class Utils {
+public class FrequencyCounterImpl implements FrequencyCounter {
 
-    public static boolean isNumeric(String str) {
-        try {
-            double d = Double.parseDouble(str);
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public static Map<String, Integer> getWordFrequencies(Collection<String> tokens) {
+    @Override
+    public Map<String, Integer> getWordFrequencies(Collection<String> tokens) {
         return tokens
             .parallelStream()
             .collect(Collectors
                 .toConcurrentMap(w -> w, w -> 1, Integer::sum));
     }
 
-    public static Map<String, Integer> getFrequenciesInSentences(Collection<String> sentences,
-                                                                 Collection<String> targetStrings) {
+    @Override
+    public Map<String, Integer> getWordFrequenciesInDocument(Collection<String> sentences, Collection<String> targetStrings) {
         String joinedSentences = String.join("", sentences);
         int sourceSentenceLength = joinedSentences.length();
 

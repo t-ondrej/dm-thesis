@@ -1,28 +1,16 @@
 package sk.upjs.ics;
 
-import sk.upjs.ics.autocomplete.Autocompleter;
-import sk.upjs.ics.autocomplete.LanguageModel;
-import sk.upjs.ics.autocomplete.LanguageModelComputer;
-import sk.upjs.ics.autocomplete.markovautocompleter.MarkovAutocompleter;
-import sk.upjs.ics.autocomplete.markovautocompleter.MarkovLanguageModel;
-import sk.upjs.ics.autocomplete.markovautocompleter.MarkovLanguageModelComputer;
-import sk.upjs.ics.preprocessing.stringpreprocessing.StringPreprocessingUnit;
-import sk.upjs.ics.preprocessing.stringpreprocessing.StringPreprocessor;
-import sk.upjs.ics.preprocessing.stringpreprocessing.preprocessingunits.DelimitedNumbersGetter;
-import sk.upjs.ics.preprocessing.stringpreprocessing.preprocessingunits.PunctuationCountGetter;
-import sk.upjs.ics.preprocessing.stringpreprocessing.preprocessingunits.PunctuationOccurencyGetter;
-import sk.upjs.ics.task.GetStringBoundariesTask;
-import sk.upjs.ics.task.WekaTask;
-import sk.upjs.ics.tokenizers.WekaNGramGetter;
-import weka.core.Instances;
-import weka.core.converters.ConverterUtils;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Scanner;
+import weka.core.Trie;
 
 public class Main {
+
+    // autocorrect
+    // typicky zastupca
+    // textove tagy
+
+    // OK: autocomplete, integritne obmedzenie, filtering
+
+    // https://stackoverflow.com/questions/29487186/named-entity-recognition-using-weka
 
     public static void main(String[] args) {
         String data = /*"I WAS born in the year 1632, in the city of York, of a good family, " +
@@ -67,11 +55,22 @@ public class Main {
             Collection<StringPreprocessingUnit> stringPreprocessingUnits = Arrays.asList(new DelimitedNumbersGetter(), new PunctuationCountGetter(), new PunctuationOccurencyGetter());
 
             StringPreprocessor stringPreprocessor = new StringPreprocessor(stringPreprocessingUnits);
-            WekaTask task = new GetStringBoundariesTask(stringPreprocessor);
+            WekaTask task = new GetStringConstraintsTask(stringPreprocessor);
             task.execute(instances);
         } catch (Exception e) {
             e.printStackTrace();
         }
 */
+
+        Trie t = new Trie();
+        t.add("they");
+        t.add("thew");
+        t.add("thew");
+
+        System.out.println(t.getWithPrefix("the"));
+
+        String test = "arw is noon";
+
+        String avarage = "Ther, there is my friends.";
     }
 }

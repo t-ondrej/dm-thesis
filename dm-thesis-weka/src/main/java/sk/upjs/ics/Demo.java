@@ -6,32 +6,27 @@ import sk.upjs.ics.autocomplete.LanguageModelComputer;
 import sk.upjs.ics.autocomplete.markovautocompleter.MarkovAutocompleter;
 import sk.upjs.ics.autocomplete.markovautocompleter.MarkovLanguageModel;
 import sk.upjs.ics.autocomplete.markovautocompleter.MarkovLanguageModelComputer;
-import sk.upjs.ics.preprocessing.stringpreprocessing.StringPreprocessingUnit;
-import sk.upjs.ics.preprocessing.stringpreprocessing.StringPreprocessor;
-import sk.upjs.ics.preprocessing.stringpreprocessing.preprocessingunits.DelimitedNumbersGetter;
-import sk.upjs.ics.preprocessing.stringpreprocessing.preprocessingunits.PunctuationCountGetter;
-import sk.upjs.ics.preprocessing.stringpreprocessing.preprocessingunits.PunctuationOccurencyGetter;
-import sk.upjs.ics.task.FilterOutliersTaskIQR;
-import sk.upjs.ics.task.GetStringBoundariesTask;
-import sk.upjs.ics.task.UnifyStringFormatTask;
-import sk.upjs.ics.task.WekaTask;
-import sk.upjs.ics.tokenizers.WekaNGramGetter;
+import sk.upjs.ics.helpers.FrequencyCounterImpl;
+import sk.upjs.ics.preprocessing.Quantificator;
+import sk.upjs.ics.preprocessing.StringQuantificatorDecorator;
+import sk.upjs.ics.preprocessing.stringpreprocessing.DelimitedNumbersGetter;
+import sk.upjs.ics.preprocessing.stringpreprocessing.PunctuationCountGetter;
+import sk.upjs.ics.preprocessing.stringpreprocessing.PunctuationOccurencyGetter;
+import sk.upjs.ics.task.*;
+import sk.upjs.ics.helpers.WekaNGramGetter;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Scanner;
-import java.util.StringJoiner;
+import java.util.*;
 
 public class Demo {
 
     public static void main(String[] args) {
        // autocomplete();
-        filterOutliers();
+       // filterOutliers();
        // unifyStrings();
-       // getStringBoundaries();
+        getStringBoundaries();
     }
 
     private static void autocomplete() {
@@ -48,7 +43,7 @@ public class Demo {
         String[] sentences = joinedData.split("\\.");
 
         LanguageModelComputer languageModelComputer = new MarkovLanguageModelComputer(
-            Arrays.asList(sentences), WekaNGramGetter.create());
+            Arrays.asList(sentences), WekaNGramGetter.create(), new FrequencyCounterImpl());
 
         LanguageModel languageModel = languageModelComputer.getLanguageModel();
         Autocompleter autocompleter = new MarkovAutocompleter((MarkovLanguageModel) languageModel);
@@ -63,31 +58,14 @@ public class Demo {
                 "./dm-thesis-weka/src/main/resources/anomalies_bigoutliers.arff");
             Instances input = source.getDataSet();
 
-            WekaTask outliersTask = FilterOutliersTaskIQR.create();
-            Instances outliers = outliersTask.execute(input);
+            //Task<List<? extends Number>> outliersTask = FilterOutliersTaskIQR.create();
+            //Instances outliers = outliersTask.execute(input);
 
-            System.out.println(outliers);
+            //System.out.println(outliers);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-    }
-
-    private static void unifyStrings() {
-        ConverterUtils.DataSource source = null;
-        Instances input = null;
-        try {
-            source = new ConverterUtils.DataSource(
-                "./dm-thesis-weka/src/main/resources/strings.arff");
-            input = source.getDataSet();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        WekaTask task = UnifyStringFormatTask.create();
-        Instances output = task.execute(input);
-        System.out.println(output);
     }
 
     private static void getStringBoundaries() {
@@ -96,14 +74,14 @@ public class Demo {
                 "./dm-thesis-weka/src/main/resources/dates.arff");
             Instances instances = source.getDataSet();
             instances.setClassIndex(instances.numAttributes() - 1);
-            Collection<StringPreprocessingUnit> stringPreprocessingUnits =
+            Collection<Quantificator<String>> stringQuantificationUnits =
                 Arrays.asList(DelimitedNumbersGetter.create(),
                               PunctuationCountGetter.create(),
                               PunctuationOccurencyGetter.create());
 
-            StringPreprocessor stringPreprocessor = new StringPreprocessor(stringPreprocessingUnits);
-            WekaTask task = GetStringBoundariesTask.create(stringPreprocessor);
-            task.execute(instances);
+            StringQuantificatorDecorator stringPreprocessor = new StringQuantificatorDecorator(instances, stringQuantificationUnits);
+            Task<Instances> task = GetStringConstraintsTask.create(instances, stringPreprocessor);
+            task.execute();
         } catch (Exception e) {
             e.printStackTrace();
         }

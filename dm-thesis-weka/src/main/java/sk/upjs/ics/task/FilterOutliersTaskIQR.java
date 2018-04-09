@@ -10,14 +10,25 @@ import weka.filters.unsupervised.attribute.InterquartileRange;
  * Weka implementation of filter outliers task
  * Uses IQR method
  */
-public class FilterOutliersTaskIQR implements WekaTask {
+public class FilterOutliersTaskIQR extends AbstractTask<Instances> {
 
-    public static FilterOutliersTaskIQR create() {
-        return new FilterOutliersTaskIQR();
+    private Instances input;
+
+    private FilterOutliersTaskIQR(Instances input) {
+        this.input = input;
+    }
+
+    public static FilterOutliersTaskIQR create(Instances input) {
+        return new FilterOutliersTaskIQR(input);
     }
 
     @Override
-    public Instances execute(Instances input) {
+    protected void preprocessInput() {
+        // Placeholder
+    }
+
+    @Override
+    public Instances coreExecute() {
         InterquartileRange filter = new InterquartileRange();
         filter.setOutlierFactor(1);
 

@@ -1,8 +1,8 @@
 package sk.upjs.ics.autocomplete.markovautocompleter;
 
-import sk.upjs.ics.Utils;
+import sk.upjs.ics.helpers.FrequencyCounter;
 import sk.upjs.ics.autocomplete.LanguageModelComputer;
-import sk.upjs.ics.tokenizers.NGramGetter;
+import sk.upjs.ics.helpers.NGramGetter;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -12,12 +12,14 @@ public class MarkovLanguageModelComputer implements LanguageModelComputer<Markov
 
     private final NGramGetter ngramGetter;
     private final Collection<String> sentences;
+    private final FrequencyCounter frequencyCounter;
     private int ngramSizeMin = 1;
     private int ngramSizeMax = 6;
 
-    public MarkovLanguageModelComputer(Collection<String> sentences, NGramGetter ngramGetter) {
+    public MarkovLanguageModelComputer(Collection<String> sentences, NGramGetter ngramGetter, FrequencyCounter frequencyCounter) {
         this.sentences = sentences;
         this.ngramGetter = ngramGetter;
+        this.frequencyCounter = frequencyCounter;
     }
 
     public void setNgramSizeMin(int ngramSizeMin) {
@@ -42,7 +44,7 @@ public class MarkovLanguageModelComputer implements LanguageModelComputer<Markov
             .forEach(ngramSize -> {
                 List<Map.Entry<String, Integer>> test = sentences.stream()
                     .map(sentence ->
-                        new ArrayList<>(Utils.getWordFrequencies(ngramGetter.getNGrams(sentence, ngramSize)).entrySet()))
+                        new ArrayList<>(frequencyCounter.getWordFrequencies(ngramGetter.getNGrams(sentence, ngramSize)).entrySet()))
                     .flatMap(Collection::stream)
                     .collect(Collectors.toList());
 

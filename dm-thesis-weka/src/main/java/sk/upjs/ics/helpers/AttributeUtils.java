@@ -1,11 +1,11 @@
-package sk.upjs.ics.transformers;
+package sk.upjs.ics.helpers;
 
 import weka.core.Attribute;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public final class AttributeTransformer {
+public final class AttributeUtils {
 
     public static List<String> getStringValuesList(Attribute attribute) {
         List<String> stringValuesList = new ArrayList<>();
