@@ -1,6 +1,4 @@
-package sk.upjs.ics.preprocessing.stringpreprocessing;
-
-import sk.upjs.ics.preprocessing.Quantificator;
+package sk.upjs.ics.preprocessing.quantification;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,7 +19,7 @@ public class ByteArrayGetter implements Quantificator<String> {
     }
 
     @Override
-    public Map<String, Integer> process(String s) {
+    public Map<String, Integer> getQuantificators(String s) {
         Map<String, Integer> result = new HashMap<>();
         byte[] stringByteArray = s.getBytes();
 

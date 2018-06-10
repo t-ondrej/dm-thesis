@@ -1,10 +1,13 @@
 package sk.upjs.ics.helpers;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public final class Utils {
+
+    private Utils() {
+        // Placeholder
+    }
 
     public static boolean isNumeric(String str) {
         try {
@@ -22,5 +25,24 @@ public final class Utils {
         Collections.addAll(set, strings);
 
         return set;
+    }
+
+    public static Map<String, Integer> getWordFrequencies(Collection<String> tokens) {
+        return tokens
+            .parallelStream()
+            .collect(Collectors
+                .toConcurrentMap(w -> w, w -> 1, Integer::sum));
+    }
+
+    public static Map<String, Integer> getWordFrequenciesInDocument(Collection<String> sentences, Collection<String> targetStrings) {
+        String joinedSentences = String.join("", sentences);
+        int sourceSentenceLength = joinedSentences.length();
+
+        return targetStrings.stream()
+            .collect(Collectors
+                .toMap(s -> s, s -> {
+                    int sentenceLengthWithoutWord = joinedSentences.replaceAll("(?i)" + s, "").length();
+                    return (sourceSentenceLength - sentenceLengthWithoutWord) / s.length();
+                }));
     }
 }

@@ -16,6 +16,10 @@ import java.util.stream.IntStream;
 
 public final class InstancesUtils {
 
+    private InstancesUtils() {
+        // Placeholder
+    }
+
     public static Instances toInstances(List<Map<String, Integer>> inputInstances) {
         String instancesName = "testInstance";
         ArrayList<Attribute> attributes = new ArrayList<>();
@@ -47,10 +51,13 @@ public final class InstancesUtils {
         IntStream.range(0, instanceMap.size())
             .forEach(idx -> {
                 Map<String, Integer> result = instanceMap.get(idx);
-                Instance instance = new DenseInstance(instances.numAttributes()); // +1 is the class attribute
+                Instance instance = new DenseInstance(instances.numAttributes());
                 result.forEach((key, value) -> instance.setValue(instances.attribute(key), value));
-                instance.setValue(instances.classIndex(), instances.get(idx).value(instances.classIndex()));
                 instances.add(instance);
+              //  instance.setDataset(instances);
+              //  int hm = instances.classAttribute().numValues();
+               //  instance.setValue(instances.classIndex(), instances.get(idx).value(instances.classIndex()));
+                //instance.setValue(instances.classIndex(), instances.classAttribute().value(idx));
             });
     }
 

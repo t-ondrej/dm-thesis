@@ -1,6 +1,13 @@
 package sk.upjs.ics;
 
+import org.apache.commons.collections4.trie.PatriciaTrie;
 import weka.core.Trie;
+
+import java.io.*;
+import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public class Main {
 
@@ -12,7 +19,7 @@ public class Main {
 
     // https://stackoverflow.com/questions/29487186/named-entity-recognition-using-weka
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String data = /*"I WAS born in the year 1632, in the city of York, of a good family, " +
                 "though not of that country, my father being a foreigner of Bremen, " +
                 "who settled first at Hull. He got a good estate by merchandise, " +
@@ -38,11 +45,11 @@ public class Main {
 
         String[] sentences = data.split("\\.");
 
-        LanguageModelComputer languageModelComputer = new MarkovLanguageModelComputer(
+        LanguageModelComputer languageModelComputer = new LanguageModelComputerImpl(
                 Arrays.asList(sentences), WekaNGramGetter.create());
 
-        LanguageModel languageModel = languageModelComputer.getLanguageModel();
-        Autocompleter autocompleter = new MarkovAutocompleter((MarkovLanguageModel)languageModel);
+        NgramLanguageModel languageModel = languageModelComputer.getLanguageModel();
+        Autocompleter autocompleter = new MarkovAutocompleter((NgramLanguageModel)languageModel);
         autocompleter.getSuggestions("1")
             .forEach(System.out::println);
 
@@ -62,15 +69,43 @@ public class Main {
         }
 */
 
-        Trie t = new Trie();
-        t.add("they");
-        t.add("thew");
-        t.add("thew");
+        // Trie trie = new Trie();
+        PatriciaTrie<String> trie = new PatriciaTrie<>();
+        //  Map<String, String> lemms = new HashMap<>();
+      //  t.add("they");
+     //   t.add("thew");
+     //   t.add("thew");
 
-        System.out.println(t.getWithPrefix("the"));
+        long start = System.nanoTime();
+
+//        Scanner sc = new Scanner(new File("dm-thesis-weka/src/main/resources/lemmatization-sk.txt"));
+        FileReader fr = new FileReader("dm-thesis-weka/src/main/resources/lemmatization-sk.txt");
+        BufferedReader br = new BufferedReader(fr);
+        String line;
+
+        while ((line = br.readLine()) != null) {
+            String[] words = line.split("\t");
+            trie.put(words[1], words[0]);
+            // do your stuff...
+        }
+
+        /*
+        while (sc.hasNextLine()) {
+            String[] words = sc.nextLine().split("\t");
+
+            trie.put(words[1], words[0]);
+
+        //    lemms.put(words[1], words[0]);
+        //    for (int i = 0; i < words.length; i++) {
+        //    }
+        }
+*/
+        long end = System.nanoTime();
+
+        System.out.println((end - start) / 1_000_000_000.0);
 
         String test = "arw is noon";
+        System.out.println(trie.get("káblu"));
 
-        String avarage = "Ther, there is my friends.";
     }
 }

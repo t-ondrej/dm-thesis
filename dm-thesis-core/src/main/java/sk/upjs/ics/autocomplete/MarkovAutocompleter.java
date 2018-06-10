@@ -1,6 +1,4 @@
-package sk.upjs.ics.autocomplete.markovautocompleter;
-
-import sk.upjs.ics.autocomplete.Autocompleter;
+package sk.upjs.ics.autocomplete;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -12,16 +10,16 @@ import java.util.stream.Collectors;
  */
 public class MarkovAutocompleter implements Autocompleter {
 
-    private MarkovLanguageModel languageModel;
+    private NgramLanguageModel languageModel;
     private Autocompleter.PartOfSentence partOfSentence = PartOfSentence.START;
     private int suggestionNGramSize = 3;
     private int suggestionsCount = 5;
 
-    public MarkovAutocompleter(MarkovLanguageModel languageModel) {
+    public MarkovAutocompleter(NgramLanguageModel languageModel) {
         this.languageModel = languageModel;
     }
 
-    public void setLanguageModel(MarkovLanguageModel languageModel) {
+    public void setLanguageModel(NgramLanguageModel languageModel) {
         this.languageModel = languageModel;
     }
 
@@ -89,6 +87,7 @@ public class MarkovAutocompleter implements Autocompleter {
                 .collect(Collectors.toList());
     }
 
+    // TODO: to language model
     private Map<String, Double> getProbabilities(Collection<String> sentences) {
         Map<String, Double> sentenceToProbability = new HashMap<>(sentences.size());
 

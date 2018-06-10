@@ -1,7 +1,6 @@
 package sk.upjs.ics.helpers;
 
 import org.junit.Test;
-import weka.core.SerializedObject;
 
 import java.util.Arrays;
 import java.util.Collection;

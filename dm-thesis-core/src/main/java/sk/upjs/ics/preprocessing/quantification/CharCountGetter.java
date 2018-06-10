@@ -1,10 +1,8 @@
-package sk.upjs.ics.preprocessing.stringpreprocessing;
+package sk.upjs.ics.preprocessing.quantification;
 
 import sk.upjs.ics.helpers.Utils;
-import sk.upjs.ics.preprocessing.Quantificator;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,7 +21,7 @@ public class CharCountGetter implements Quantificator<String> {
     }
 
     @Override
-    public Map<String, Integer> process(String string) {
+    public Map<String, Integer> getQuantificators(String string) {
         Map<String, Integer> result = new HashMap<>();
 
         for (int i = 0; i < string.length(); i++) {

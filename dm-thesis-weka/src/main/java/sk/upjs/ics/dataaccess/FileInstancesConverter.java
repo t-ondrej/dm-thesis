@@ -6,7 +6,7 @@ import weka.core.converters.ConverterUtils;
 /**
  * Loading/saving instances from/to file
  */
-public class FileInstancesConverter extends AbstractFileSourcedConverter implements InstancesConverter {
+public class FileInstancesConverter extends AbstractFileSourcedConverter implements DataSetConverter<Instances> {
 
 	public FileInstancesConverter(String filePath) {
 		super(filePath);

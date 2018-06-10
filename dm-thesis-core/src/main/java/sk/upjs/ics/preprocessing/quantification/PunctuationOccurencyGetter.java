@@ -1,6 +1,4 @@
-package sk.upjs.ics.preprocessing.stringpreprocessing;
-
-import sk.upjs.ics.preprocessing.Quantificator;
+package sk.upjs.ics.preprocessing.quantification;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,7 +20,7 @@ public class PunctuationOccurencyGetter implements Quantificator<String> {
 	}
 
 	@Override
-	public Map<String, Integer> process(String string) {
+	public Map<String, Integer> getQuantificators(String string) {
 		Map<String, Integer> result = new HashMap<>();
 
 		for (int i = 0; i < string.length(); i++) {

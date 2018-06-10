@@ -7,6 +7,10 @@ import java.util.List;
 
 public final class AttributeUtils {
 
+    private AttributeUtils() {
+        // Placeholder
+    }
+
     public static List<String> getStringValuesList(Attribute attribute) {
         List<String> stringValuesList = new ArrayList<>();
 

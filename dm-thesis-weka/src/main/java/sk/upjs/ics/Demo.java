@@ -1,23 +1,13 @@
 package sk.upjs.ics;
 
-import sk.upjs.ics.autocomplete.Autocompleter;
-import sk.upjs.ics.autocomplete.LanguageModel;
-import sk.upjs.ics.autocomplete.LanguageModelComputer;
-import sk.upjs.ics.autocomplete.markovautocompleter.MarkovAutocompleter;
-import sk.upjs.ics.autocomplete.markovautocompleter.MarkovLanguageModel;
-import sk.upjs.ics.autocomplete.markovautocompleter.MarkovLanguageModelComputer;
-import sk.upjs.ics.helpers.FrequencyCounterImpl;
-import sk.upjs.ics.preprocessing.Quantificator;
-import sk.upjs.ics.preprocessing.StringQuantificatorDecorator;
-import sk.upjs.ics.preprocessing.stringpreprocessing.DelimitedNumbersGetter;
-import sk.upjs.ics.preprocessing.stringpreprocessing.PunctuationCountGetter;
-import sk.upjs.ics.preprocessing.stringpreprocessing.PunctuationOccurencyGetter;
+import sk.upjs.ics.preprocessing.quantification.Quantificator;
+import sk.upjs.ics.preprocessing.quantification.DelimitedNumbersGetter;
+import sk.upjs.ics.preprocessing.quantification.PunctuationCountGetter;
+import sk.upjs.ics.preprocessing.quantification.PunctuationOccurencyGetter;
 import sk.upjs.ics.task.*;
-import sk.upjs.ics.helpers.WekaNGramGetter;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 
-import java.io.File;
 import java.util.*;
 
 public class Demo {
@@ -30,6 +20,7 @@ public class Demo {
     }
 
     private static void autocomplete() {
+        /*
         StringJoiner data = new StringJoiner(" ");
 
         try (Scanner sc = new Scanner(new File("./dm-thesis-weka/src/main/resources/autocomplete_data.txt"))) {
@@ -42,13 +33,14 @@ public class Demo {
         String joinedData = data.toString();
         String[] sentences = joinedData.split("\\.");
 
-        LanguageModelComputer languageModelComputer = new MarkovLanguageModelComputer(
+        LanguageModelComputer languageModelComputer = new LanguageModelComputerImpl(
             Arrays.asList(sentences), WekaNGramGetter.create(), new FrequencyCounterImpl());
 
-        LanguageModel languageModel = languageModelComputer.getLanguageModel();
-        Autocompleter autocompleter = new MarkovAutocompleter((MarkovLanguageModel) languageModel);
+        NgramLanguageModel languageModel = languageModelComputer.getLanguageModel();
+        Autocompleter autocompleter = new MarkovAutocompleter((NgramLanguageModel) languageModel);
         autocompleter.getSuggestions("Vauquer")
             .forEach(System.out::println);
+            */
     }
 
     // Interval <1, 20>
@@ -69,7 +61,7 @@ public class Demo {
     }
 
     private static void getStringBoundaries() {
-        try {
+       /* try {
             ConverterUtils.DataSource source = new ConverterUtils.DataSource(
                 "./dm-thesis-weka/src/main/resources/dates.arff");
             Instances instances = source.getDataSet();
@@ -84,6 +76,25 @@ public class Demo {
             task.execute();
         } catch (Exception e) {
             e.printStackTrace();
+        }*/
+
+        ConverterUtils.DataSource source = null;
+        try {
+            source = new ConverterUtils.DataSource(
+                "./dm-thesis-weka/src/main/resources/dates.arff");
+
+            Instances instances = source.getDataSet();
+            instances.setClassIndex(instances.numAttributes() - 1);
+            Collection<Quantificator<String>> stringQuantificationUnits =
+                Arrays.asList(DelimitedNumbersGetter.create(),
+                    PunctuationCountGetter.create(),
+                    PunctuationOccurencyGetter.create());
+
+            StringFormExtractor formExtractor = WekaStringFormExtractor.create(instances, stringQuantificationUnits);
+            formExtractor.extractStringForm();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 }

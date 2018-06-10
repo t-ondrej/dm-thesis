@@ -1,21 +1,21 @@
-package sk.upjs.ics.preprocessing.stringpreprocessing;
+package sk.upjs.ics.preprocessing.quantification;
 
 import sk.upjs.ics.helpers.Range;
 import sk.upjs.ics.helpers.Utils;
-import sk.upjs.ics.preprocessing.Quantificator;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class NumbersRangeGetter implements Quantificator<String> {
+public class CharsRangeGetter implements Quantificator<String> {
 
-    private final String min = "MinNumber";
-    private final String max = "MaxNumber";
+    private final String min = "MinChar";
+    private final String max = "MaxChar";
     private final Set<String> labels = Utils.newHashSet(min, max);
 
-    public static NumbersRangeGetter create() {
-        return new NumbersRangeGetter();
+    public static CharsRangeGetter create() {
+
+        return new CharsRangeGetter();
     }
 
     @Override
@@ -24,14 +24,14 @@ public class NumbersRangeGetter implements Quantificator<String> {
     }
 
     @Override
-    public Map<String, Integer> process(String string) {
+    public Map<String, Integer> getQuantificators(String string) {
         Map<String, Integer> result = new HashMap<>();
         Range range = new Range();
 
         for (int i = 0; i < string.length(); i++) {
             char character = string.charAt(i);
 
-            if (Character.isDigit(character) && !range.isInRange(character)) {
+            if (Character.isLetter(character) && !range.isInRange(character)) {
                 range.update(character);
             }
         }
@@ -41,5 +41,4 @@ public class NumbersRangeGetter implements Quantificator<String> {
 
         return result;
     }
-
 }
