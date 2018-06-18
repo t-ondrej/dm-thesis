@@ -11,5 +11,9 @@ public abstract class LanguageModel {
         this.inputSentences = sentences;
     }
 
-    abstract Map<Integer, String> getProbabilities(String token);
+    public Collection<String> getInputSentences() {
+        return this.inputSentences;
+    }
+
+    public abstract Map<String, Double> getProbabilities(Collection<String> sentences);
 }
